@@ -60,6 +60,11 @@ class Connection extends Doctrine\DBAL\Connection
 	 */
 	private $dbalTypes = [];
 
+	/**
+	 * @var array
+	 */
+	private $mappingTypes = [];
+
 
 
 	/**
@@ -275,6 +280,16 @@ class Connection extends Doctrine\DBAL\Connection
 
 
 
+	/**
+	 * @param array $mappingTypes
+	 */
+	public function setMappingTypes(array $mappingTypes)
+	{
+		$this->mappingTypes = $mappingTypes;
+	}
+
+
+
 	public function connect()
 	{
 		if ($this->isConnected()) {
@@ -293,6 +308,10 @@ class Connection extends Doctrine\DBAL\Connection
 		parent::connect();
 
 		$platform = $this->getDatabasePlatform();
+
+		foreach ($this->mappingTypes as $dbType => $dbalType) {
+			$platform->registerDoctrineTypeMapping($dbType, $dbalType);
+		}
 
 		foreach ($this->schemaTypes as $dbType => $doctrineType) {
 			$platform->registerDoctrineTypeMapping($dbType, $doctrineType);

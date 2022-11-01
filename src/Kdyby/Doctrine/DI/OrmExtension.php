@@ -102,6 +102,7 @@ class OrmExtension extends Nette\DI\CompilerExtension
 		'defaultTableOptions' => [],
 		'resultCache' => 'default',
 		'types' => [],
+		'mapping_types' => [],
 		'schemaFilter' => NULL,
 	];
 
@@ -520,6 +521,11 @@ class OrmExtension extends Nette\DI\CompilerExtension
 			$schemaTypes[$dbType] = $typeInst->getName();
 		}
 
+		$mappingTypes = [];
+		foreach ($config['mapping_types'] as $dbType => $dbalType) {
+			$mappingTypes[$dbType] = $dbalType;
+		}
+
 		// tracy panel
 		if ($this->isTracyPresent()) {
 			$builder->addDefinition($this->prefix($name . '.diagnosticsPanel'))
@@ -538,6 +544,7 @@ class OrmExtension extends Nette\DI\CompilerExtension
 			])
 			->addSetup('setSchemaTypes', [$schemaTypes])
 			->addSetup('setDbalTypes', [$dbalTypes])
+			->addSetup('setMappingTypes', [$mappingTypes])
 			->addTag(self::TAG_CONNECTION)
 			->addTag('kdyby.doctrine.connection')
 			->setAutowired($isDefault);

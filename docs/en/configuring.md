@@ -81,6 +81,7 @@ doctrine:
 	defaultTableOptions: []				# can be used for changing of collation
 	resultCache: default				# you choose your cache from the values in the section above
 	types: []							# custom dbal types for conversion database => php type and back
+    mapping_types: []                   # custom dbal mapping types (non-class)
 ```
 
 
